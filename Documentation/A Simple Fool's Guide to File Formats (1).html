@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>hegelelab - A Simple Fool's Guide to File Formats</title>
+    <link rel="stylesheet" href="static/style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  </head>
+  <body>
+    <div class="wiki" id="content_view" style="display: block;">
+<img src="http://blogs.scientificamerican.com/guest-blog/files/2015/03/Human-DNA.jpg" alt="external image Human-DNA.jpg" title="external image Human-DNA.jpg" /><br />
+<br />
+<h3 id="toc0"><a name="x--For new students, bioinformatic techniques and terminology may seem intimidating at first. The purpose of the following guide is to familiarize new students to some file formats and the general workflow used in the Hegele lab."></a>For new students, bioinformatic techniques and terminology may seem intimidating at first. The purpose of the following guide is to familiarize new students to some file formats and the general workflow used in the Hegele lab.</h3>
+ <br />
+The Hegele lab is host to various next generation sequencing technologies, like our MiSeq and NextSeq. However, keep in mind that these machines don't sequence entire areas of interest (exome for example) at once- they sequence them in <em>reads of hundreds of bases</em> in length (for comparison, the human genome is <a class="wiki_link_ext" href="https://en.wikipedia.org/wiki/Genome_size" rel="nofollow" target="_blank">3 BILLION base pairs long</a>). So you're telling me we need to assemble <em>all of those reads</em> into long coherent stretches?! If you're thinking this right now you're not wrong:<br />
+<img src="http://artmoments.com/wp-content/uploads/2014/02/PUzzle.jpg" alt="external image PUzzle.jpg" title="external image PUzzle.jpg" /><br />
+<br />
+But thankfully <a class="wiki_link_ext" href="https://s-media-cache-ak0.pinimg.com/736x/66/ae/77/66ae778b9b086fdf94982ca7c8659160.jpg" rel="nofollow" target="_blank">we don't physically do the assembling</a>. That's where the workflow comes in, and to understand the workflow we need some basic understanding of file formats that are used in the process. A file format is basically a way that specific information is encoded in a computer; i.e. PNG files store images, DOC files are structures as lines of electronic text, etc. In the same manner, FASTQ is a type of text file (like a DOC file) whose <em>main function is to store reads</em> that are generated from sequencing instruments.<br />
+<br />
+So essentially, through a long series of library preparation steps, our NGS machines are fed the prepared DNA template of interest, they process the information (sequence reads), and they spit out FASTQ files (that contain the reads).<br />
+<br />
+Great. I still don't get what a FASTQ file is.<br />
+<br />
+It's not as complicated as it seems. Here is literally what a FASTQ file looks like (you can open this in word<br />
+document processors like Microsoft Word):<br />
+<br />
+<img src="files/fastq.png" alt="fastq.png" title="fastq.png" /><br />
+<br />
+The <strong>first line</strong> &quot;@seq1 description 1&quot; is known as a <em>sequence header line</em> and isn't really all that important; it just identifies the sequences from each other and provides an optional description. The <strong>second line</strong> is obviously the <em>biological sequence data</em> that was read by the NGS machine- those are the individual puzzle pieces we saw above. The <strong>&quot;+&quot; sign</strong> is an <em>optional quality header line</em> that separates sequence data from quality scores. The symbols and letters in the <strong>fourth line</strong> are <em>quality scores</em>, also known as <em>Phred scores</em> and <em>Q scores</em>. These are integer values representing the estimated probability of an error (that the base is incorrect).<br />
+<br />
+For the math geeks out there, if <span style="font-family: Arial,sans-serif; font-size: 10pt;">P = 10^(</span>–<span style="font-family: Arial,sans-serif; font-size: 10pt;">Q/10)</span><span style="font-family: Arial; font-size: 10pt;" class="ManText">, then <em>Q = –10 log10(P)</em>. These Q scores are represented as keyboard characters (don't ask me why), for example:</span><br />
+<br />
+<img src="files/Q%20score.PNG" alt="Q score.PNG" title="Q score.PNG" style="height: 210px; width: 656px;" /><br />
+<br />
+Cool. FASTQ files are easy <em>and</em> now you can appreciate how similar FASTQ files are to FASTA files, the type generally used when inputting nucleotide and peptide sequences to search engines such as NCBI BLAST.<br />
+<br />
+Now that we have our biological sequence data of interest and corresponding quality scores in readily available formats, our workflow can start to align the reads. That's where <a class="wiki_link_ext" href="http://www-images.theonering.org/torwp/wp-content/uploads/2013/05/samwise-gamgee-300x184.jpg" rel="nofollow" target="_blank">SAM</a> files come in. Not that Sam. This SAM:<br />
+<br />
+
+<style type="text/css"><!--
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.text  {font-family:monospace;}
+.text .imp {font-weight: bold; color: red;}
+.text span.xtra { display:block; }
+
+-->
+</style><pre class="text">1:497:R:-272+13M17D24M    113    1    497    37    37M    15    100338662    0    CGGGTCTGACCTGAGGAGAACTGTGCTCCGCCTTCAG    0;==-==9;&gt;&gt;&gt;&gt;&gt;=&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;    XT:A:U    NM:i:0    SM:i:37    AM:i:0    X0:i:1    X1:i:0    XM:i:0    XO:i:0    XG:i:0    MD:Z:37
+19:20389:F:275+18M2D19M    99    1    17644    0    37M    =    17919    314    TATGACTGCTAATAATACCTACACATGTTAGAACCAT    &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&lt;&lt;&gt;&gt;&gt;&lt;&lt;&gt;&gt;4::&gt;&gt;:&lt;9    RG:Z:UM0098:1    XT:A:R    NM:i:0    SM:i:0    AM:i:0    X0:i:4    X1:i:0    XM:i:0    XO:i:0    XG:i:0    MD:Z:37
+19:20389:F:275+18M2D19M    147    1    17919    0    18M2D19M    =    17644    -314    GTAGTACCAACTGTAAGTCCTTATCTTCATACTTTGT    ;44999;499&lt;8&lt;8&lt;&lt;&lt;8&lt;&lt;&gt;&lt;&lt;&lt;&lt;&gt;&lt;7&lt;;&lt;&lt;&lt;&gt;&gt;&lt;&lt;    XT:A:R    NM:i:2    SM:i:0    AM:i:0    X0:i:4    X1:i:0    XM:i:0    XO:i:1    XG:i:2    MD:Z:18^CA19
+9:21597+10M2I25M:R:-209    83    1    21678    0    8M2I27M    =    21469    -244    CACCACATCACATATACCAAGCCTGGCTGTGTCTTCT    &lt;;9&lt;&lt;5&gt;&lt;&lt;&lt;&lt;&gt;&lt;&lt;&lt;&gt;&gt;&lt;&lt;&gt;&lt;&gt;&gt;&lt;9&gt;&gt;&lt;&gt;&gt;&gt;9&gt;&gt;&gt;&lt;&gt;    XT:A:R    NM:i:2    SM:i:0    AM:i:0    X0:i:5    X1:i:0    XM:i:0    XO:i:1    XG:i:2    MD:Z:35</pre>
+
+Don't be intimidated. SAM files are, in simplest terms, the reads and quality scores from a FASTQ file aligned to a reference sequence. For our purposes, the reference sequence is the human genome. So we take the raw, randomly dispersed data from FASTQ files that reminds me of this:<br />
+<img src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/6/6c/Shredded_Documents_of_US_Embassy.jpg" alt="external image Shredded_Documents_of_US_Embassy.jpg" title="external image Shredded_Documents_of_US_Embassy.jpg" /><br />
+<br />
+and we use a program to align them into this:<br />
+<br />
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Stack_of_Copy_Paper.jpg/800px-Stack_of_Copy_Paper.jpg" alt="external image 800px-Stack_of_Copy_Paper.jpg" title="external image 800px-Stack_of_Copy_Paper.jpg" style="height: 351px; width: 521px;" /><br />
+<br />
+The result is a <em>Sequence Alignment Map</em> (SAM) file. You can imagine that this SAM file would contain a lot of information and would be difficult to handle, given that we as bioinformaticians rarely actually delve into that mountain of data (again, we let computers deal with that). So somebody decided to develop a <em>Binary Alignment Map (BAM)</em> file, which has exactly the same information as a SAM but in binary code, which is easier and faster to process.<br />
+<br />
+We now logically come to the final file format conversion of this pipeline. The whole purpose of this workflow is to identify how our input DNA sequence differs from the reference genome (to find a rare variant in a gene that leads to a certain disease, for example). So it seems natural for our output file to tell us where possible variants may lie and what kind of variants they are. That is exactly the purpose of a <em>Variant Call Format (VCF)</em> file. Here is an example below:<br />
+<br />
+<img src="files/vcf.PNG" alt="vcf.PNG" title="vcf.PNG" style="height: 272px; width: 669px;" /><br />
+<br />
+VCF files are usually stored in a compressed manner, and can be viewed using user-friendly software such as Microsoft Excel to analyse our data. However, they usually <a class="wiki_link_ext" href="http://gregorybknapp.com/wp-content/uploads/2015/08/info.jpg" rel="nofollow" target="_blank">contain too much information</a> so we run them through a filtering software such as ANNOVAR to annotate genetic variants that have potential for causation.<br />
+<br />
+Congratulations for making it this far. You may be thinking: &quot;if computers do this for us, why would I need to know any of it?&quot;. If, for example, you plan on running exomes or LipidSeq you will encounter these files when analyzing data and they are integral for creating appropriate CLC workflows which are discussed in the <a class="wiki_link" href="Theory%20Behind%20our%20CLC%20Workflow.html">next section</a>.<br />
+<br />
+Email me if you have any questions. <a class="wiki_link_ext" href="mailto:aradonj@uwo.ca" rel="nofollow">aradonj@uwo.ca</a>
+    </div>
+  </body>
+</html>

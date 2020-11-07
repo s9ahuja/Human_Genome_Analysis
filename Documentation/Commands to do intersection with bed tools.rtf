@@ -1,0 +1,55 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Menlo-Regular;
+\f3\fnil\fcharset0 Menlo-Bold;\f4\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red242\green242\blue242;\red0\green0\blue0;
+}
+{\*\expandedcolortbl;;\csgray\c0;\csgray\c95825;\csgray\c0\c85000;
+}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Commands for bed tools intersect
+\f1\b0 \
+\
+\
+
+\f0\b To remove the chr from the initial bed file to do the the intersection\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\b0\fs22 \cf2 \CocoaLigature0 sed -i -e 's/chr//g' bedfile\
+\
+Example -> sed -i -e 's/chr//g' 2020_05_OS_V1_250bp.bed\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \CocoaLigature1 \
+
+\f0\b To conduct the bed file and vcd file intersection\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\b0\fs22 \cf2 \CocoaLigature0 bedtools intersect -a vcffile -b bedfile -header > name(add -> .vcf)\
+\
+Example -> bedtools intersect -a 220d9976-ebed-4ea1-8c09-46723ddac703.vcf -b 2020_05_OS_V1_250bp.bed -header > output.vcf\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \CocoaLigature1 \
+
+\f0\b To remove 0/0
+\f1\b0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf2 \CocoaLigature0 grep -v 0/0 filename > newfilename\
+\
+Example -> grep -v 0/0 ONDREseq_bedtovcf_comparison.vcf > Output.vcf  \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3\b  To remove > from pasta file\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f4\b0\fs20 \cf3 \cb4 awk '1;NF\{print ""\}' 3_S3_L001_R2_001.fasta > 3_S3_L001_R2_001_space.fasta\
+grep -v ">" 3_S3_L001_R2_001_space.fasta > 3_S3_L001_R2_001.noheader\
+\
+\
+Gzip -d sample5.vcf.gz  }
